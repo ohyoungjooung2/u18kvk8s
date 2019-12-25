@@ -26,7 +26,7 @@ oyj@oyj-laptop:~/kvm-vagrant-docker-k8s-config$ vagrant ssh kubemaster
 Last login: Wed Apr  3 18:24:24 2019
 
 
-[vagrant@kubemaster ~]$ kubectl get nodes
+```[vagrant@kubemaster ~]$ kubectl get nodes
 
 
 NAME          STATUS     ROLES    AGE    VERSION
@@ -35,10 +35,10 @@ kubemaster    Ready      master   13m    v1.14.0
 
 kubeworker1   NotReady   <none>   105s   v1.14.0
  
-kubeworker2   NotReady   <none>   96s    v1.14.0
+kubeworker2   NotReady   <none>   96s    v1.14.0```
 
 
-[vagrant@kubemaster ~]$ kubectl get nodes
+```[vagrant@kubemaster ~]$ kubectl get nodes
 
 
 NAME          STATUS   ROLES    AGE     VERSION
@@ -47,10 +47,10 @@ kubemaster    Ready    master   13m     v1.14.0
 
 kubeworker1   Ready    <none>   2m28s   v1.14.0
  
-kubeworker2   Ready    <none>   2m19s   v1.14.0
+kubeworker2   Ready    <none>   2m19s   v1.14.0```
 
 
-[vagrant@kubemaster ~]$ kubectl get pods --all-namespaces
+```[vagrant@kubemaster ~]$ kubectl get pods --all-namespaces
 
 NAMESPACE     NAME                                 READY   STATUS    RESTARTS   AGE
 
@@ -76,5 +76,5 @@ kube-system   kube-proxy-96qxc                     1/1     Running   0          
 
 kube-system   kube-proxy-dfddc                     1/1     Running   0          2m44s
 
-kube-system   kube-scheduler-kubemaster            1/1     Running   0          13m
+kube-system   kube-scheduler-kubemaster            1/1     Running   0          13m```
 
