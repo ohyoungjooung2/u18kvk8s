@@ -22,11 +22,11 @@ Log in "vagrant ssh kubemaster" after vagrant up finished.
 $kubectl get nodes #this command will show three nodes !
 
 ex)
-oyj@oyj-laptop:~/kvm-vagrant-docker-k8s-config$ vagrant ssh kubemaster
+```oyj@oyj-laptop:~/kvm-vagrant-docker-k8s-config$ vagrant ssh kubemaster
 Last login: Wed Apr  3 18:24:24 2019
 
 
-```[vagrant@kubemaster ~]$ kubectl get nodes
+[vagrant@kubemaster ~]$ kubectl get nodes
 
 
 NAME          STATUS     ROLES    AGE    VERSION
