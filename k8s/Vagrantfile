@@ -1,0 +1,139 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+   
+   #config.vm.synced_folder ".","/vagrant",type:"basic"
+   config.vm.define "kubemaster", primary: true do |kubemaster|
+   kubemaster.vm.box = "centos/7"
+   kubemaster.vm.provision "ck",type:"shell", path: "check_key.sh"
+   kubemaster.vm.provision "shell", :path => "swapoff.sh"
+   kubemaster.vm.provision "shell", :path => "k8s_docker_install.sh"
+   kubemaster.vm.provision "shell", :path => "k8s_install.sh"
+   kubemaster.vm.provision "kaf", type: "shell", :path => "kubeadm-flannel.sh"
+   kubemaster.vm.network "private_network", ip:"10.1.0.2"
+   kubemaster.vm.host_name = "kubemaster"
+     kubemaster.vm.provider :libvirt do |lv|
+
+      lv.cpus = 2
+      lv.memory = 2048
+     end
+   end
+
+
+
+   config.vm.define "kubeworker1" do |kubeworker1|
+   kubeworker1.vm.box = "centos/7"
+   kubeworker1.vm.provision "shell", path: "check_key.sh"
+   kubeworker1.vm.provision "file", source: "id_rsa",destination: "/home/vagrant/.ssh/id_rsa"
+   kubeworker1.vm.provision "shell", :path => "swapoff.sh"
+   kubeworker1.vm.provision "shell", :path => "k8s_docker_install.sh"
+   kubeworker1.vm.provision "shell", :path => "k8s_install.sh"
+   kubeworker1.vm.provision "adm",type:"shell", :path => "admjoin.sh"
+   kubeworker1.vm.network "private_network", ip:"10.1.0.3"
+   kubeworker1.vm.host_name = "kubeworker1"
+     kubeworker1.vm.provider :libvirt do |lv|
+      lv.memory = 2048
+      lv.cpus = 1
+      lv.storage :file, :size => '1G', :type => 'raw'
+      lv.storage :file, :size => '1G', :type => 'raw'
+      lv.storage :file, :size => '1G', :type => 'raw'
+     end
+   end
+
+   
+   config.vm.define "kubeworker2" do |kubeworker2|
+   kubeworker2.vm.box = "centos/7"
+   kubeworker2.vm.provision "shell", path: "check_key.sh"
+   kubeworker2.vm.provision "file", source: "id_rsa",destination: "/home/vagrant/.ssh/id_rsa"
+   kubeworker2.vm.provision "shell", :path => "swapoff.sh"
+   kubeworker2.vm.provision "shell", :path => "k8s_docker_install.sh"
+   kubeworker2.vm.provision "shell", :path => "k8s_install.sh"
+   kubeworker2.vm.provision "adm",type: "shell", :path => "admjoin.sh"
+   kubeworker2.vm.network "private_network", ip:"10.1.0.4"
+   kubeworker2.vm.host_name = "kubeworker2"
+     kubeworker2.vm.provider :libvirt do |lv|
+      lv.memory = 2048
+      lv.cpus = 1
+      lv.storage_pool_name = "data"
+      lv.storage :file, :size => '1G', :type => 'raw'
+      lv.storage :file, :size => '1G', :type => 'raw'
+      lv.storage :file, :size => '1G', :type => 'raw'
+     end
+   end
+
+   config.vm.define "kubeworker3" do |kubeworker3|
+   kubeworker3.vm.box = "centos/7"
+   kubeworker3.vm.provision "shell", path: "check_key.sh"
+   kubeworker3.vm.provision "file", source: "id_rsa",destination: "/home/vagrant/.ssh/id_rsa"
+   kubeworker3.vm.provision "shell", :path => "swapoff.sh"
+   kubeworker3.vm.provision "shell", :path => "k8s_docker_install.sh"
+   kubeworker3.vm.provision "shell", :path => "k8s_install.sh"
+   kubeworker3.vm.provision "adm", type:"shell", :path => "admjoin.sh"
+   kubeworker3.vm.network "private_network", ip:"10.1.0.5"
+   kubeworker3.vm.host_name = "kubeworker3"
+     kubeworker3.vm.provider :libvirt do |lv|
+      lv.cpus = 1
+      lv.memory = 2048
+      lv.storage_pool_name = "data"
+      lv.storage :file, :size => '1G', :type => 'raw'
+      lv.storage :file, :size => '1G', :type => 'raw'
+      lv.storage :file, :size => '1G', :type => 'raw'
+     end
+   end
+
+
+   config.vm.define "nfserver" do |nfserver|
+   nfserver.vm.box = "centos/7"
+   nfserver.vm.provision "shell", path: "check_key.sh"
+   nfserver.vm.provision "file", source: "id_rsa",destination: "/home/vagrant/.ssh/id_rsa"
+   nfserver.vm.provision "shell", :path => "k8s_docker_install.sh"
+   nfserver.vm.network "private_network", ip:"10.1.0.7"
+   nfserver.vm.provision "annfs", type:"ansible" do |ansible|
+      ansible.playbook = "nfsFileSystem.yaml"
+   end
+   nfserver.vm.provision "nfsdocker", type:"shell", :path => "nfsDocker.sh"
+   nfserver.vm.host_name = "nfserver"
+     nfserver.vm.provider :libvirt do |lv|
+      #lv.storage_pool_name = "data"
+      lv.cpus = 1
+      lv.memory = 512
+      lv.storage :file, :size => '8G', :type => 'raw'
+     end
+   end
+
+end
+
+
+
+#   config.vm.define "haproxy" do |haproxy|
+#   haproxy.vm.box = "centos/7"
+#   haproxy.vm.provision "shell", path: "check_key.sh"
+#   haproxy.vm.provision "file", source: "id_rsa",destination: "/home/vagrant/.ssh/id_rsa"
+#   haproxy.vm.network "private_network", ip:"10.1.0.6"
+#   haproxy.vm.host_name = "haproxy"
+#     haproxy.vm.provider :libvirt do |lv|
+#      lv.cpus = 1
+#      lv.memory = 256
+#      lv.storage :file, :size => '1G', :type => 'raw'
+#     end
+#   end
+#   config.vm.define "kubemaster1", primary: true do |kubemaster1|
+#   kubemaster1.vm.box = "centos/7"
+#   kubemaster1.vm.provision "shell", path: "check_key.sh"
+#   kubemaster1.vm.provision "shell", :path => "swapoff.sh"
+#   kubemaster1.vm.provision "shell", :path => "k8s_docker_install.sh"
+#   kubemaster1.vm.provision "shell", :path => "k8s_install.sh"
+#   kubemaster1.vm.provision "shell", :path => "kubeadm-flannel.sh"
+#   kubemaster1.vm.network "private_network", ip:"10.1.0.100"
+#   kubemaster1.vm.host_name = "kubemaster1"
+#     kubemaster1.vm.provider :libvirt do |lv|
+#
+#      lv.cpus = 2
+#      lv.memory = 2048
+#     end
+#   end

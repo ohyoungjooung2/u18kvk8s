@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: elasticsearch
+  labels:
+    app: elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elasticsearch
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+      - image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+        name: elasticsearch
+        env:
+        - name: discovery.type
+          value: single-node
+        #- name: WORDPRESS_DB_HOST
+        #  #Previsous mariadb-master svc, I already created.!
+        #  value: mariadb-master
+        #- name: WORDPRESS_DB_PASSWORD
+        #  valueFrom:
+        #    secretKeyRef:
+        #      name: mariadb-pass
+        #      key: password
+        ports:
+        - containerPort: 9200
+          protocol: TCP 
+          name: http
+        resources:
+          limits:
+            cpu: 500m
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            memory: 2Gi
+        volumeMounts:
+        - name: esearch-persistent-storage
+          mountPath: /usr/share/data
+      volumes:
+      - name: esearch-persistent-storage
+        persistentVolumeClaim:
+          #claimName: wp-pv-claim
+          claimName: storage-claim-for-esearch

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: actuator-sample
+  labels:
+    app: actuator-sample
+spec:
+  ports:
+    - port: 8080
+  selector:
+    app: actuator-sample
+  type: NodePort
+  ports:
+  - port: 8073
+    nodePort: 32338
+    targetPort: 8080
+    protocol: TCP
+    name: http

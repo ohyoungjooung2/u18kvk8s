@@ -1,0 +1,29 @@
+# MariaDB-specific config file.
+# Read by /etc/mysql/my.cnf
+#
+[client]
+#  Default is Latin1, if you need UTF-8 set this (also in server section)
+# default-character-set = utf8 
+#
+[mysqld]
+#master server for replication
+log-bin
+server_id=1
+log-basename=master1
+# * Character sets
+#  Default is Latin1, if you need UTF-8 set all this (also in client section)
+character_set_server   = utf8 
+collation_server       = utf8_general_ci 
+#
+[mysqld_safe]
+skip_log_error
+syslog
+
+[mariadb]
+# See https://mariadb.com/kb/en/how-to-enable-tokudb-in-mariadb/
+# # for instructions how to enable TokuDB
+# #
+# # See https://mariadb.com/kb/en/tokudb-differences/ for differences
+# # between TokuDB in MariaDB and TokuDB from http://www.tokutek.com/
+#
+# #plugin-load-add=ha_tokudb.so

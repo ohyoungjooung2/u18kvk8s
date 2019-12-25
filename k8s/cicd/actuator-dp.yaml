@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: actuator-sample
+spec:
+  replicas: 1
+  template:
+     metadata:
+       labels:
+         app: actuator-sample
+     spec:
+       containers:
+       - name: actuator-sample
+         image: 10.1.0.7:3333/actuator:1.1
+         imagePullPolicy: Always
+         ports:
+         - containerPort: 8080
+       imagePullSecrets:
+         - name: regcred
+

@@ -1,0 +1,37 @@
+---
+- hosts: kuber
+  gather_facts: no
+
+  strategy: free  
+
+  become: yes
+
+  vars:
+      node_ip: "{{ ansible_eth1['ipv4']['address'] }}"     
+  tasks:
+
+  - name: Collect only facts returned by facter
+    setup:
+      gather_subset:
+         - '!all'
+         - '!any'
+         - network
+
+  - name: Node ip for NodePort working
+    shell: echo {{ ansible_eth1['ipv4']['address'] }}
+    register: result
+
+  - debug:
+      var: result
+
+  - name: register node port
+    lineinfile:
+      path: /etc/default/kubelet
+      create: yes
+      line: KUBELET_EXTRA_ARGS=--node-ip={{ node_ip }}
+
+  - name: start kubelet
+    service:
+      name: kubelet
+      daemon_reload: yes
+      state: restarted

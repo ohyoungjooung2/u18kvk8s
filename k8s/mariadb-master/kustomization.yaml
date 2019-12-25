@@ -1,0 +1,12 @@
+secretGenerator:
+- name: mariadb-pass
+  literals:
+  - password=StrongPass$^^$
+- name: rep-user
+  literals:
+  - rep-user=rep-user
+- name: rep-password
+  literals:
+  - rep-password=Good$^Password!
+resources:
+  - mariadb-master.yaml

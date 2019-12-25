@@ -1,0 +1,34 @@
+---
+- hosts: kuber
+  gather_facts: no
+
+  become: yes
+  #This playbook plays to install crt for docker upload to private docker register srever
+  vars:
+     TOMAKE_DIR: "/etc/docker/certs.d/10.1.0.7:3333/"
+     SRC_FILE: "/etc/docker/certs.d/10.1.0.7:3333/ca.crt"
+     DEST_FILE: "/etc/docker/certs.d/10.1.0.7:3333/ca.crt"
+  tasks:
+
+  - name: "make directory {{ TOMAKE_DIR }}"
+    file: 
+       path: "{{ TOMAKE_DIR }}"
+       state: directory
+       owner: root
+       group: root
+       mode: '0600'
+    register: result
+
+  - debug:
+      var: result
+
+  - name: "copy {{ SRC_FILE }} TO {{ DEST_FILE }}"
+    copy:
+      src: "{{ SRC_FILE }}"
+      dest: "{{ DEST_FILE }}"
+      owner: root
+      group: root
+    register: result
+
+  - debug:
+      var: result

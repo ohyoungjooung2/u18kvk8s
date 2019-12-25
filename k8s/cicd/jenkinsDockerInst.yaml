@@ -1,0 +1,76 @@
+---
+- hosts: "{{ var_host | default('kuber') }}"
+  gather_facts: no
+
+  become: yes
+
+  vars:
+      OWNER: "oyj"
+      HOMEDIR: "/home/oyj"
+      JENKINS_HOME: "{{ HOMEDIR }}/jenkins"
+      JENKINS_DOWN: "{{ JENKINS_HOME }}/downloads"
+  tasks:
+
+  - name: "{{ JENKINS_HOME }} DIR CHECK IF EXITS"
+    command: "ls {{ JENKINS_HOME }}"
+       #path: "{{ JENKINS_HOME }}"
+    ignore_errors: yes
+    register: jhome_chk
+
+  - debug:
+      var: jhome_chk
+
+  #- meta: end_play
+
+  - name: "make dir {{ JENKINS_HOME }}"
+    file:
+      path: "{{ JENKINS_HOME }}"
+      state: directory
+      owner: "{{ OWNER }}"
+      group: "{{ OWNER }}"
+      mode: 0755
+
+    when: jhome_chk.rc != 0
+    register: result
+
+  - debug:
+      #var: result.diff.before.state
+      var: result
+
+     
+
+  - name: "{{ JENKINS_DOWN }} DIR CHECK IF EXITS"
+    command: "ls {{ JENKINS_DOWN }}"
+       #path: "{{ JENKINS_DOWN }}"
+    ignore_errors: yes
+    register: jhome_chk_down
+  - debug:
+      var: jhome_chk_down
+
+  - name: "make dir {{ JENKINS_DOWN }}"
+    file:
+      path: "{{ JENKINS_DOWN }}"
+      state: directory
+      owner: "{{ OWNER }}"
+      group: "{{ OWNER }}"
+      mode: 0755
+    when: jhome_chk_down.rc != 0
+    register: result
+
+
+  - name: "Launch jenkins:lts container"
+    #command: "docker run  -u root  --rm  -d  -p 8081:8080  -p 50000:50000  -v {{ JENKINS_HOME }}:/var/jenkins_home -v {{ JENKINS_DOWN }}:/var/jenkins_home/downloads  -v /var/run/docker.sock:/var/run/docker.sock  jenkinsci/blueocean"
+    command: "docker run --restart=always  -d  -p 8081:8080  -p 50000:50000  -v {{ JENKINS_HOME }}:/var/jenkins_home -v {{ JENKINS_DOWN }}:/var/jenkins_home/downloads  -v /var/run/docker.sock:/var/run/docker.sock  jenkinsci/blueocean"
+#  - name: "Launch jenkins:lts container"
+#    docker_container:
+#      name: "myjenkins-lts"
+#      image: "jenkins/jenkins:lts"
+#      volumes:
+#        - "{{ JENKINS_HOME }}:/var/jenkins_home:rw"
+#        - "{{ JENKINS_DOWN }}:/var/jenkins_home/downloads:rw"
+#      restart: true
+#      ports:
+#        - 8081:8080
+  - debug:
+      var: result
+#  #- meta: end_play

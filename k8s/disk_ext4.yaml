@@ -1,0 +1,38 @@
+---
+#Below is k8s workder nodes that has 3 disks
+- hosts: 10.1.0.5,10.1.0.4,10.1.0.3
+  become: yes
+
+  tasks:
+    # Create file system on each nodes' local disks
+    - name: Create ext4 file systems
+      filesystem:
+        fstype: ext4
+        dev: "{{ item }}"
+        force: yes
+      with_items:
+        - /dev/vdb
+        - /dev/vdc
+        - /dev/vdd 
+
+    - name: Create mount dir for /dev/vdxx
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: root
+        group: root
+      with_items:
+        - /db1
+        - /db2
+        - /web
+
+    - name: Mount each dev to each dir
+      mount:
+        path: "{{item.tar}}"
+        src: "{{item.src}}"
+        fstype: ext4
+        state: mounted
+      with_items:
+        - { src: '/dev/vdb', tar: '/db1' }
+        - { src: '/dev/vdc', tar: '/db2' }
+        - { src: '/dev/vdd', tar: '/web' }

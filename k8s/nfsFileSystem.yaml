@@ -1,0 +1,31 @@
+---
+#Creating filesystem for nfs server
+- hosts: all
+  become: yes
+
+  tasks:
+    # Create file system on each nodes' local disks
+    - name: Create xfs file systems
+      filesystem:
+        fstype: xfs
+        dev: /dev/vdb
+        force: yes
+      with_items:
+        - /dev/vdb
+
+    - name: Create mount dir for /dev/vdxx
+      file:
+        path: /nfs
+        state: directory
+        owner: root
+        group: root
+
+    - name: Mount each dev to each dir
+      mount:
+        path: /nfs
+        src:  /dev/vdb
+        fstype: xfs
+        state: mounted
+
+    - name: sudo usermod -aG docker vagrant
+      shell: sudo usermod -aG docker vagrant

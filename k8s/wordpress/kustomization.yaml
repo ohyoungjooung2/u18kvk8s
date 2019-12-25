@@ -1,0 +1,6 @@
+secretGenerator:
+- name: mariadb-pass
+  literals:
+  - password=StrongPass$^^$
+resources:
+  - wp-dp.yaml
