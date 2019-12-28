@@ -44,3 +44,4 @@ echo "vagrat up kubemaster finished"
 ##echo "Will up kubeworker1 and rests"
 #vagrant up kubeworker1 --provision
 vagrant up kubeworker1
+vagrant up kubeworker2
