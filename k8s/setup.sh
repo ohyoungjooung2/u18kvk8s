@@ -41,6 +41,6 @@ fi
 echo "Wait until kubemaster ready to accept nodes to join"
 sleep 300;
 echo "vagrat up kubemaster finished"
-##echo "Will up kubeworker1 and rests"
-#vagrant up kubeworker1 --provision
 vagrant up kubeworker1
+vagrant up kubeworker2
+
