@@ -24,8 +24,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      end
    end
 
-
-
    config.vm.define "kubeworker1" do |kubeworker1|
    kubeworker1.vm.box = "centos/7"
    kubeworker1.vm.provision "shell", path: "check_key.sh"
@@ -66,45 +64,45 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      end
    end
 
-   config.vm.define "kubeworker3" do |kubeworker3|
-   kubeworker3.vm.box = "centos/7"
-   kubeworker3.vm.provision "shell", path: "check_key.sh"
-   kubeworker3.vm.provision "file", source: "id_rsa",destination: "/home/vagrant/.ssh/id_rsa"
-   kubeworker3.vm.provision "shell", :path => "swapoff.sh"
-   kubeworker3.vm.provision "shell", :path => "k8s_docker_install.sh"
-   kubeworker3.vm.provision "shell", :path => "k8s_install.sh"
-   kubeworker3.vm.provision "adm", type:"shell", :path => "admjoin.sh"
-   kubeworker3.vm.network "private_network", ip:"10.1.0.5"
-   kubeworker3.vm.host_name = "kubeworker3"
-     kubeworker3.vm.provider :libvirt do |lv|
-      lv.cpus = 1
-      lv.memory = 2048
-      lv.storage_pool_name = "data"
-      lv.storage :file, :size => '1G', :type => 'raw'
-      lv.storage :file, :size => '1G', :type => 'raw'
-      lv.storage :file, :size => '1G', :type => 'raw'
-     end
-   end
-
-
-   config.vm.define "nfserver" do |nfserver|
-   nfserver.vm.box = "centos/7"
-   nfserver.vm.provision "shell", path: "check_key.sh"
-   nfserver.vm.provision "file", source: "id_rsa",destination: "/home/vagrant/.ssh/id_rsa"
-   nfserver.vm.provision "shell", :path => "k8s_docker_install.sh"
-   nfserver.vm.network "private_network", ip:"10.1.0.7"
-   nfserver.vm.provision "annfs", type:"ansible" do |ansible|
-      ansible.playbook = "nfsFileSystem.yaml"
-   end
-   nfserver.vm.provision "nfsdocker", type:"shell", :path => "nfsDocker.sh"
-   nfserver.vm.host_name = "nfserver"
-     nfserver.vm.provider :libvirt do |lv|
-      #lv.storage_pool_name = "data"
-      lv.cpus = 1
-      lv.memory = 512
-      lv.storage :file, :size => '8G', :type => 'raw'
-     end
-   end
+#   config.vm.define "kubeworker3" do |kubeworker3|
+#   kubeworker3.vm.box = "centos/7"
+#   kubeworker3.vm.provision "shell", path: "check_key.sh"
+#   kubeworker3.vm.provision "file", source: "id_rsa",destination: "/home/vagrant/.ssh/id_rsa"
+#   kubeworker3.vm.provision "shell", :path => "swapoff.sh"
+#   kubeworker3.vm.provision "shell", :path => "k8s_docker_install.sh"
+#   kubeworker3.vm.provision "shell", :path => "k8s_install.sh"
+#   kubeworker3.vm.provision "adm", type:"shell", :path => "admjoin.sh"
+#   kubeworker3.vm.network "private_network", ip:"10.1.0.5"
+#   kubeworker3.vm.host_name = "kubeworker3"
+#     kubeworker3.vm.provider :libvirt do |lv|
+#      lv.cpus = 1
+#      lv.memory = 2048
+#      lv.storage_pool_name = "data"
+#      lv.storage :file, :size => '1G', :type => 'raw'
+#      lv.storage :file, :size => '1G', :type => 'raw'
+#      lv.storage :file, :size => '1G', :type => 'raw'
+#     end
+#   end
+#
+#
+#   config.vm.define "nfserver" do |nfserver|
+#   nfserver.vm.box = "centos/7"
+#   nfserver.vm.provision "shell", path: "check_key.sh"
+#   nfserver.vm.provision "file", source: "id_rsa",destination: "/home/vagrant/.ssh/id_rsa"
+#   nfserver.vm.provision "shell", :path => "k8s_docker_install.sh"
+#   nfserver.vm.network "private_network", ip:"10.1.0.7"
+#   nfserver.vm.provision "annfs", type:"ansible" do |ansible|
+#      ansible.playbook = "nfsFileSystem.yaml"
+#   end
+#   nfserver.vm.provision "nfsdocker", type:"shell", :path => "nfsDocker.sh"
+#   nfserver.vm.host_name = "nfserver"
+#     nfserver.vm.provider :libvirt do |lv|
+#      #lv.storage_pool_name = "data"
+#      lv.cpus = 1
+#      lv.memory = 512
+#      lv.storage :file, :size => '8G', :type => 'raw'
+#     end
+#   end
 
 end
 
