@@ -11,11 +11,10 @@ user@host$ bash setup.sh
 Please keep in mind:
 Warning.
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+###############################################################################################################
+# Never use this in production env. This repo container id_rsa ,which is private key just for convenience.
 
- Never use this in production env. This repo container id_rsa ,which is private key just for convenience.
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+###############################################################################################################
 
 
 Log in "vagrant ssh kubemaster" after vagrant up finished.
