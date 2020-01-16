@@ -21,6 +21,7 @@ oyj@oyj-X555QG:~/u18kvk8s/k8s$ bash vagrant_install.sh
 ```
 
 3. user id into kvm and libvirt
+```
 oyj@oyj-X555QG:~/u18kvk8s/k8s$ sudo adduser `id -un` kvm
 oyj@oyj-X555QG:~/u18kvk8s/k8s$ sudo adduser `id -un` libvirt
 
@@ -29,3 +30,4 @@ oyj@oyj-X555QG:~$ cd ~/u18kvk8s/k8s/
 oyj@oyj-X555QG:~/u18kvk8s/k8s$ bash setup.sh 
 
 
+```
