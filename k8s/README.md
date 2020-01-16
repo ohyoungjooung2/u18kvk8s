@@ -28,7 +28,34 @@ oyj@oyj-X555QG:~/u18kvk8s/k8s$ sudo adduser `id -un` libvirt
 oyj@oyj-X555QG:~/u18kvk8s/k8s$ sudo su - $USER
 oyj@oyj-X555QG:~$ cd ~/u18kvk8s/k8s/
 oyj@oyj-X555QG:~/u18kvk8s/k8s$ bash setup.sh 
+..............................
+ kubeworker2: [kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+    kubeworker2: [kubelet-start] Starting the kubelet
+    kubeworker2: [kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...
+    kubeworker2: 
+    kubeworker2: This node has joined the cluster:
+    kubeworker2: * Certificate signing request was sent to apiserver and a response was received.
+    kubeworker2: * The Kubelet was informed of the new secure connection details.
+    kubeworker2: 
+    kubeworker2: Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
+
 
 ```
 
+4. Log in to kubemaster
 
+```
+oyj@oyj-X555QG:~/u18kvk8s/k8s$ vagrant ssh kubemaster
+Last login: Thu Jan 16 13:30:17 2020
+[vagrant@kubemaster ~]$ kubectl get no
+NAME          STATUS   ROLES    AGE     VERSION
+kubemaster    Ready    master   15m     v1.17.0
+kubeworker1   Ready    <none>   6m6s    v1.17.0
+kubeworker2   Ready    <none>   3m22s   v1.17.0
+
+```
+
+# Conclusion.
+It is not yet mature enough but it will be useful.
+You should configure nod-ip to user NodePort though.
+Have fun.
