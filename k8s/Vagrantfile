@@ -57,7 +57,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      kubeworker2.vm.provider :libvirt do |lv|
       lv.memory = 2048
       lv.cpus = 1
-      lv.storage_pool_name = "data"
       lv.storage :file, :size => '1G', :type => 'raw'
       lv.storage :file, :size => '1G', :type => 'raw'
       lv.storage :file, :size => '1G', :type => 'raw'
