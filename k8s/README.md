@@ -55,5 +55,4 @@ kubeworker2   Ready    <none>   3m22s   v1.17.0
 
 # Conclusion.
 It is not yet mature enough but it will be useful.
-You should configure nod-ip to user NodePort though.
-Have fun.
+
