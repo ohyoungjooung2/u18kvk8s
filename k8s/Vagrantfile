@@ -57,12 +57,32 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      kubeworker2.vm.provider :libvirt do |lv|
       lv.memory = 2048
       lv.cpus = 1
-      lv.storage_pool_name = "data"
+      #lv.storage_pool_name = "data"
       lv.storage :file, :size => '1G', :type => 'raw'
       lv.storage :file, :size => '1G', :type => 'raw'
       lv.storage :file, :size => '1G', :type => 'raw'
      end
    end
+
+
+   config.vm.define "dockerregi" do |dockerregi|
+   dockerregi.vm.box = "centos/7"
+   dockerregi.vm.provision "shell", path: "check_key.sh"
+   dockerregi.vm.provision "file", source: "id_rsa",destination: "/home/vagrant/.ssh/id_rsa"
+   dockerregi.vm.provision "shell", :path => "swapoff.sh"
+   dockerregi.vm.provision "shell", :path => "k8s_docker_install.sh"
+   dockerregi.vm.network "private_network", ip:"10.1.0.7"
+   dockerregi.vm.host_name = "dockerregi"
+     dockerregi.vm.provider :libvirt do |lv|
+      lv.memory = 2048
+      lv.cpus = 1
+      #lv.storage_pool_name = "data"
+      lv.storage :file, :size => '1G', :type => 'raw'
+      lv.storage :file, :size => '1G', :type => 'raw'
+      lv.storage :file, :size => '1G', :type => 'raw'
+     end
+   end
+
 
 #   config.vm.define "kubeworker3" do |kubeworker3|
 #   kubeworker3.vm.box = "centos/7"

@@ -37,9 +37,19 @@ else
    exit 1
 fi
 
+schk(){
+    if [[ $? -eq 0 ]]
+    then
+      echo "$1 success"
+    else
+      echo "$1 success"
+    fi
+}
 
 echo "Wait until kubemaster ready to accept nodes to join"
 sleep 300;
 echo "vagrat up kubemaster finished"
 vagrant up kubeworker1
+schk kubeworker1
 vagrant up kubeworker2
+schk kubeworker2
