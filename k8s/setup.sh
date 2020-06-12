@@ -46,10 +46,27 @@ schk(){
     fi
 }
 
-echo "Wait until kubemaster ready to accept nodes to join"
-sleep 300;
-echo "vagrat up kubemaster finished"
-vagrant up kubeworker1
-schk kubeworker1
-vagrant up kubeworker2
-schk kubeworker2
+while true
+do
+ t=$(ssh  -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i id_rsa vagrant@10.1.0.2 '/usr/bin/kubectl get no' | grep -i kubemaster | tail -1 | awk '{print $2}')
+ if [[ $t == "Ready" ]]
+ then
+	 echo "Success of kubemaster initializing pods --all-namesaces"
+	 echo "Staring kubeworker1"
+         vagrant up kubeworker1
+         schk kubeworker1
+	 echo "Staring kubeworker2"
+         vagrant up kubeworker2
+         schk kubeworker2
+	 exit 0
+ else
+         echo "Wait until kubemaster ready to accept nodes to join"
+	 sleep 1
+ fi
+done
+
+
+#vagrant up kubeworker1
+#schk kubeworker1
+#vagrant up kubeworker2
+#schk kubeworker2
