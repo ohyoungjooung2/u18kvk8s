@@ -1,63 +1,58 @@
-# kvm-vagrant-docker-k8s-config
- This vagrant Vagrantfile and setup will consist of k8s dev setup.
- 
- Just bash setup.sh will do the work.
+# Intro
+This git shows how to install k8s using kvm+libvirt+vagrant+k8s on ubunt18.04(xubuntu desktop).
 
-Example)
+After git clone like below.
+
+```oyj@oyj-X555QG:~$ git clone https://github.com/ohyoungjooung2/u18kvk8s.git
+
+```
+1. Install kvm and libvirt
+```
+
+ oyj@oyj-X555QG:~/u18kvk8s/k8s$ bash kvm_install.sh ```
+ ```
+
+2. Install vagrant
+```
+oyj@oyj-X555QG:~/u18kvk8s/k8s$ bash vagrant_install.sh 
+```
+
+3. user id into kvm and libvirt group
+
+```
+oyj@oyj-X555QG:~/u18kvk8s/k8s$ sudo adduser `id -un` kvm
+oyj@oyj-X555QG:~/u18kvk8s/k8s$ sudo adduser `id -un` libvirt
+
+oyj@oyj-X555QG:~/u18kvk8s/k8s$ sudo su - $USER
+oyj@oyj-X555QG:~$ cd ~/u18kvk8s/k8s/
+oyj@oyj-X555QG:~/u18kvk8s/k8s$ bash setup.sh 
+..............................
+ kubeworker2: [kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+    kubeworker2: [kubelet-start] Starting the kubelet
+    kubeworker2: [kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...
+    kubeworker2: 
+    kubeworker2: This node has joined the cluster:
+    kubeworker2: * Certificate signing request was sent to apiserver and a response was received.
+    kubeworker2: * The Kubelet was informed of the new secure connection details.
+    kubeworker2: 
+    kubeworker2: Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
 
 
-user@host$ bash setup.sh
+```
 
-Please keep in mind:
-Warning.
+4. Log in to kubemaster
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
- Never use this in production env. This repo container id_rsa ,which is private key just for convenience.
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-Log in "vagrant ssh kubemaster" after vagrant up finished.
-
-$kubectl get nodes #this command will show three nodes !
-
-ex)
-```oyj@oyj-laptop:~/kvm-vagrant-docker-k8s-config$ vagrant ssh kubemaster
-Last login: Wed Apr  3 18:24:24 2019
-
-
-[vagrant@kubemaster ~]$ kubectl get nodes
-
-NAME          STATUS     ROLES    AGE    VERSION
-kubemaster    Ready      master   13m    v1.14.0
-kubeworker1   NotReady   <none>   105s   v1.14.0
-kubeworker2   NotReady   <none>   96s    v1.14.0```
-
-
-```[vagrant@kubemaster ~]$ kubectl get nodes
-
-
+```
+oyj@oyj-X555QG:~/u18kvk8s/k8s$ vagrant ssh kubemaster
+Last login: Thu Jan 16 13:30:17 2020
+[vagrant@kubemaster ~]$ kubectl get no
 NAME          STATUS   ROLES    AGE     VERSION
-kubemaster    Ready    master   13m     v1.14.0
-kubeworker1   Ready    <none>   2m28s   v1.14.0
- kubeworker2   Ready    <none>   2m19s   v1.14.0```
+kubemaster    Ready    master   15m     v1.17.0
+kubeworker1   Ready    <none>   6m6s    v1.17.0
+kubeworker2   Ready    <none>   3m22s   v1.17.0
 
+```
 
-```[vagrant@kubemaster ~]$ kubectl get pods --all-namespaces
-
-NAMESPACE     NAME                                 READY   STATUS    RESTARTS   AGE
-
-kube-system   coredns-fb8b8dccf-kj9db              1/1     Running   0          13m
-kube-system   coredns-fb8b8dccf-rtds2              1/1     Running   0          13m
-kube-system   etcd-kubemaster                      1/1     Running   0          12m
-kube-system   kube-apiserver-kubemaster            1/1     Running   0          13m
-kube-system   kube-controller-manager-kubemaster   1/1     Running   0          13m
-kube-system   kube-flannel-ds-amd64-69rpq          1/1     Running   0          13m
-kube-system   kube-flannel-ds-amd64-smxnn          1/1     Running   0          2m53s
-kube-system   kube-flannel-ds-amd64-tmcbl          1/1     Running   0          2m44s
-kube-system   kube-proxy-5zhrl                     1/1     Running   0          13m
-kube-system   kube-proxy-96qxc                     1/1     Running   0          2m53s
-kube-system   kube-proxy-dfddc                     1/1     Running   0          2m44s
-kube-system   kube-scheduler-kubemaster            1/1     Running   0          13m```
+# Conclusion.
+It is not yet mature enough but it will be useful.
 
