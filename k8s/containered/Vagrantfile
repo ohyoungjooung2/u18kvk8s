@@ -1,0 +1,41 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+   
+   #config.vm.synced_folder ".","/vagrant",type:"basic"
+   config.vm.define "kubemaster", primary: true do |kubemaster|
+   kubemaster.vm.box = "ubuntu/jammy64"
+   kubemaster.vm.network "private_network", ip:"10.1.0.2"
+   kubemaster.vm.host_name = "kubemaster"
+   kubemaster.vm.provider "virtualbox" do |lv|
+    lv.memory = 2048
+    lv.cpus = 2
+   end
+  end
+
+   config.vm.define "kubeworker1" do |kubeworker1|
+   kubeworker1.vm.box = "ubuntu/jammy64"
+   kubeworker1.vm.host_name = "kubeworker1"
+   kubeworker1.vm.network "private_network", ip:"10.1.0.3"
+   kubeworker1.vm.provider "virtualbox" do |lv|
+    lv.memory = 2048
+    lv.cpus = 2
+   end
+  end
+
+   
+   config.vm.define "kubeworker2" do |kubeworker2|
+   kubeworker2.vm.box = "ubuntu/jammy64"
+   kubeworker2.vm.host_name = "kubeworker2"
+   kubeworker2.vm.network "private_network", ip:"10.1.0.4"
+   kubeworker2.vm.provider "virtualbox" do |lv|
+      lv.memory = 2048
+      lv.cpus = 2
+     end
+  end
+end
